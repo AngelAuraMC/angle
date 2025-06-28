@@ -1,0 +1,7 @@
+# Build arguments go here.
+# See "gn args <out_dir> --list" for available build arguments.
+target_os = "android"
+target_cpu = "arm"
+angle_enable_vulkan = true
+is_component_build = false
+is_debug = false

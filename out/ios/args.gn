@@ -1,0 +1,9 @@
+# Build arguments go here.
+# See "gn args <out_dir> --list" for available build arguments.
+enable_run_ios_unittests_with_xctest = true
+is_component_build = false
+is_debug = false
+target_cpu = "arm64"
+target_environment = "device"
+target_os = "ios"
+
