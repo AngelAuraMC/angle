@@ -1,0 +1,96 @@
+name: Build ANGLE
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [ opened, reopened ]
+  workflow_dispatch:
+
+jobs:
+  build:
+# This requires about 25GB to properly build. Please make sure the runner can provide that.
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        include:
+          - os: android
+            arch: arm64
+          - os: android
+            arch: arm
+          - os: android
+            arch: x86
+          - os: android
+            arch: x64
+          - os: ios
+            arch: arm64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+# This bit always takes forever to finish cloning so lets just cache it
+      - name: Cache third_party/llvm
+        uses: actions/cache@v4
+        with:
+          path: third_party/llvm
+          key: third_party-llvm
+      - name: Cache third_party/VK-GL-CTS
+        uses: actions/cache@v4
+        with:
+          path: third_party/VK-GL-CTS
+          key: third_party-VK-GL-CTS
+      - name: Cache third_party/SwiftShader
+        uses: actions/cache@v4
+        with:
+          path: third_party/SwiftShader
+          key: third_party-SwiftShader
+      - name: Cache third_party/dawn
+        uses: actions/cache@v4
+        with:
+          path: third_party/dawn
+          key: third_party-dawn
+      - name: Cache depot_tools
+        uses: actions/cache@v4
+        with:
+          path: depot_tools
+          key: depot-tools
+# This should only be rarely ran so its here so the cache priority still is somewhat biggest to smallest
+      - name: Install depot_tools
+        run: |
+          if [ ! -d "depot_tools" ] ; then
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          fi
+          echo "$PWD/depot_tools" >> $GITHUB_PATH
+      - name: Cache tools
+        uses: actions/cache@v4
+        with:
+          path: tools
+          key: tools
+      - name: Cache build
+        uses: actions/cache@v4
+        with:
+          path: build
+          key: build
+
+      - name: Fetch ANGLE and dependencies
+        run: |
+          gclient config --spec 'solutions = [
+            {
+              "name": ".",
+              "url": "https://chromium.googlesource.com/angle/angle.git",
+              "deps_file": "DEPS",
+              "managed": False,
+              "custom_vars": {},
+            },
+          ]
+          target_os = ["${{ matrix.os }}"]'
+          gclient sync -Rf
+      - name: Build ANGLE
+        run: |
+          gn gen out/${{ matrix.os }}-${{ matrix.arch }}
+          autoninja -C out/${{ matrix.os }}-${{ matrix.arch }}
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ANGLE-${{ matrix.os }}-${{ matrix.arch }}
+          path: out/${{ matrix.os }}-${{ matrix.arch }}
