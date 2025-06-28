@@ -1,0 +1,26 @@
+defines = -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D__ARM_NEON__=1 -DANDROID -D__ANDROID_UNAVAILABLE_SYMBOLS_ARE_WEAK__ -DHAVE_SYS_UIO_H -DANDROID_NDK_VERSION_ROLL=r28_1 -DCR_CLANG_REVISION=\"llvmorg-21-init-16348-gbd809ffb-1\" -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_NONE -D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS -D_LIBCXXABI_DISABLE_VISIBILITY_ANNOTATIONS -D_LIBCPP_INSTRUMENTED_WITH_ASAN=0 -DCR_LIBCXX_REVISION=b5d83e70a1537fbce965e6319877c76794daaa80 -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DSTACK_LINE_READER_BUFFER_SIZE=1024 -DHAVE_STRONG_GETAUXVAL
+include_dirs = -I../.. -Igen -I../../buildtools/third_party/libc++ -I../../third_party/cpu_features/src/include
+cflags = -Wall -Wextra -Wimplicit-fallthrough -Wextra-semi -Wunreachable-code-aggressive -Wthread-safety -Wgnu -Wno-gnu-anonymous-struct -Wno-gnu-conditional-omitted-operand -Wno-gnu-include-next -Wno-gnu-label-as-value -Wno-gnu-redeclared-enum -Wno-gnu-statement-expression -Wno-gnu-zero-variadic-macro-arguments -Wno-zero-length-array -Wunguarded-availability -Wno-missing-field-initializers -Wno-unused-parameter -Wno-psabi -Wloop-analysis -Wno-unneeded-internal-declaration -Wno-cast-function-type -Wno-thread-safety-reference-return -Wno-nontrivial-memcall -Wno-character-conversion -Wshadow -Werror -fno-delete-null-pointer-checks -fno-strict-overflow -fno-ident -fno-strict-aliasing -fstack-protector -funwind-tables -fPIC -fcolor-diagnostics -fmerge-all-constants -fno-sized-deallocation -fcrash-diagnostics-dir=../../tools/clang/crashreports -mllvm -instcombine-lower-dbg-declare=0 -mllvm -split-threshold-for-reg-with-hint=0 -ffp-contract=off -fcomplete-member-pointers -ffunction-sections -fno-short-enums -mbranch-protection=standard --target=aarch64-linux-android29 -mno-outline -Wno-builtin-macro-redefined -D__DATE__= -D__TIME__= -D__TIMESTAMP__= -ffile-compilation-dir=. -no-canonical-prefixes -ftrivial-auto-var-init=pattern -O2 -fdata-sections -ffunction-sections -fno-unique-section-names -fno-math-errno -fno-omit-frame-pointer -gdwarf-4 -g1 -gdwarf-aranges -fdebug-info-for-profiling -fvisibility=hidden -Wheader-hygiene -Wstring-conversion -Wtautological-overlap-compare -Wno-unused-function
+cflags_c = -std=c11 --sysroot=../../third_party/android_toolchain/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot
+label_name = cpuinfo
+root_out_dir = .
+target_out_dir = obj/third_party/cpu_features
+target_output_name = cpuinfo
+
+build obj/third_party/cpu_features/cpuinfo/filesystem.o: cc ../../third_party/cpu_features/src/src/filesystem.c
+  source_file_part = filesystem.c
+  source_name_part = filesystem
+build obj/third_party/cpu_features/cpuinfo/hwcaps.o: cc ../../third_party/cpu_features/src/src/hwcaps.c
+  source_file_part = hwcaps.c
+  source_name_part = hwcaps
+build obj/third_party/cpu_features/cpuinfo/stack_line_reader.o: cc ../../third_party/cpu_features/src/src/stack_line_reader.c
+  source_file_part = stack_line_reader.c
+  source_name_part = stack_line_reader
+build obj/third_party/cpu_features/cpuinfo/string_view.o: cc ../../third_party/cpu_features/src/src/string_view.c
+  source_file_part = string_view.c
+  source_name_part = string_view
+build obj/third_party/cpu_features/cpuinfo/impl_aarch64_linux_or_android.o: cc ../../third_party/cpu_features/src/src/impl_aarch64_linux_or_android.c
+  source_file_part = impl_aarch64_linux_or_android.c
+  source_name_part = impl_aarch64_linux_or_android
+
+build phony/third_party/cpu_features/cpuinfo: phony obj/third_party/cpu_features/cpuinfo/filesystem.o obj/third_party/cpu_features/cpuinfo/hwcaps.o obj/third_party/cpu_features/cpuinfo/stack_line_reader.o obj/third_party/cpu_features/cpuinfo/string_view.o obj/third_party/cpu_features/cpuinfo/impl_aarch64_linux_or_android.o

@@ -1,0 +1,36 @@
+{
+  "android_manifest": "gen/src/tests/angle_deqp_khr_gles2_tests__apk/AndroidManifest.xml",
+  "apk_path": "angle_deqp_khr_gles2_tests_apk/angle_deqp_khr_gles2_tests-debug.apk",
+  "bundled_srcjars": [
+    "gen/src/tests/angle_deqp_khr_gles2_tests__apk__compile_resources.srcjar",
+    "gen/src/tests/angle_deqp_khr_gles2_tests__apk__native_libraries.srcjar",
+    "gen/src/tests/angle_deqp_khr_gles2_tests__apk__build_config_srcjar.srcjar"
+  ],
+  "bypass_platform_checks": false,
+  "chromium_code": true,
+  "deps_configs": [
+    "gen/build/android/build_java.build_config.json",
+    "gen/src/tests/native_test_java.build_config.json",
+    "gen/third_party/android_sdk/android_sdk_java.build_config.json"
+  ],
+  "dex_path": "obj/src/tests/angle_deqp_khr_gles2_tests__apk.dex.jar",
+  "final_dex_path": "obj/src/tests/angle_deqp_khr_gles2_tests__apk/angle_deqp_khr_gles2_tests__apk.mergeddex.jar",
+  "gn_target": "//src/tests:angle_deqp_khr_gles2_tests__apk__java",
+  "interface_jar_path": "obj/src/tests/angle_deqp_khr_gles2_tests__apk.turbine.jar",
+  "is_prebuilt": false,
+  "loadable_modules": [
+
+  ],
+  "merged_android_manifest": "gen/src/tests/angle_deqp_khr_gles2_tests__apk/AndroidManifest.merged.xml",
+  "processed_jar_path": "obj/src/tests/angle_deqp_khr_gles2_tests__apk.javac.jar",
+  "proguard_enabled": false,
+  "requires_android": true,
+  "requires_robolectric": false,
+  "rtxt_path": "gen/src/tests/angle_deqp_khr_gles2_tests__apk__compile_resources_R.txt",
+  "shared_libraries_runtime_deps_file": "gen/src/tests/angle_deqp_khr_gles2_tests__apk.native_libs",
+  "supports_android": true,
+  "type": "android_apk",
+  "unprocessed_jar_path": "obj/src/tests/angle_deqp_khr_gles2_tests__apk.javac.jar",
+  "version_code": "1",
+  "version_name": "Developer Build"
+}

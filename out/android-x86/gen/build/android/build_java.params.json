@@ -1,0 +1,25 @@
+{
+  "bundled_srcjars": [
+    "gen/build/android/native_libraries_gen.srcjar",
+    "gen/build/android/placeholder_build_config_srcjar.srcjar"
+  ],
+  "bypass_platform_checks": false,
+  "chromium_code": true,
+  "deps_configs": [
+    "gen/third_party/android_sdk/android_sdk_java.build_config.json"
+  ],
+  "dex_path": "obj/build/android/build_java.dex.jar",
+  "gn_target": "//build/android:build_java",
+  "interface_jar_path": "obj/build/android/build_java.turbine.jar",
+  "is_prebuilt": false,
+  "processed_jar_path": "obj/build/android/build_java.javac.jar",
+  "proguard_configs": [
+    "../../build/android/chromium_annotations.flags"
+  ],
+  "requires_android": false,
+  "requires_robolectric": false,
+  "supports_android": true,
+  "target_sources_file": "gen/build/android/build_java.sources",
+  "type": "java_library",
+  "unprocessed_jar_path": "obj/build/android/build_java.javac.jar"
+}

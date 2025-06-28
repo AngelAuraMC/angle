@@ -1,0 +1,19 @@
+{
+  "bundled_srcjars": [
+
+  ],
+  "bypass_platform_checks": false,
+  "chromium_code": false,
+  "deps_configs": [
+
+  ],
+  "gn_target": "//third_party/android_build_tools/error_prone:error_prone_java",
+  "interface_jar_path": "obj/third_party/android_build_tools/error_prone/error_prone_java.ijar.jar",
+  "is_prebuilt": true,
+  "processed_jar_path": "../../third_party/android_build_tools/error_prone/cipd/error_prone_core.jar",
+  "requires_android": false,
+  "requires_robolectric": false,
+  "supports_android": false,
+  "type": "java_library",
+  "unprocessed_jar_path": "../../third_party/android_build_tools/error_prone/cipd/error_prone_core.jar"
+}

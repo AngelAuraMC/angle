@@ -1,0 +1,14 @@
+{
+  "deps_configs": [
+
+  ],
+  "gn_target": "//third_party/android_sdk:android_xr_extensions_java",
+  "input_jars_paths": [
+    "../../third_party/android_sdk/xr_extensions/com.android.extensions.xr.jar"
+  ],
+  "mergeable_android_manifests": [
+    "gen/third_party/android_sdk/android_xr_extensions_java/AndroidManifest.xml"
+  ],
+  "supports_android": true,
+  "type": "group"
+}

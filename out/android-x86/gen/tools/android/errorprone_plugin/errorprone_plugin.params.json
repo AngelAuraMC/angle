@@ -1,0 +1,27 @@
+{
+  "bundled_srcjars": [
+
+  ],
+  "bypass_platform_checks": false,
+  "chromium_code": true,
+  "deps_configs": [
+    "gen/build/android/build_java.build_config.json",
+    "gen/build/android/build_java.build_config.json",
+    "gen/third_party/android_build_tools/error_prone/error_prone_java.build_config.json",
+    "gen/third_party/android_build_tools/error_prone_javac/error_prone_javac_java.build_config.json"
+  ],
+  "gn_target": "//tools/android/errorprone_plugin:errorprone_plugin",
+  "input_jars_paths": [
+    "../../third_party/android_build_tools/nullaway/cipd/nullaway.jar"
+  ],
+  "interface_jar_path": "obj/tools/android/errorprone_plugin/errorprone_plugin.turbine.jar",
+  "is_prebuilt": false,
+  "main_class": "<ignore>",
+  "processed_jar_path": "obj/tools/android/errorprone_plugin/errorprone_plugin.javac.jar",
+  "requires_android": false,
+  "requires_robolectric": false,
+  "supports_android": false,
+  "target_sources_file": "gen/tools/android/errorprone_plugin/errorprone_plugin.sources",
+  "type": "java_binary",
+  "unprocessed_jar_path": "obj/tools/android/errorprone_plugin/errorprone_plugin.javac.jar"
+}

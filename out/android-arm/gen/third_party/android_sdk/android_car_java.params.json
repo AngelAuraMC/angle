@@ -1,0 +1,14 @@
+{
+  "deps_configs": [
+
+  ],
+  "gn_target": "//third_party/android_sdk:android_car_java",
+  "input_jars_paths": [
+    "../../third_party/android_sdk/public/platforms/android-36/optional/android.car.jar"
+  ],
+  "mergeable_android_manifests": [
+    "gen/third_party/android_sdk/android_car_java/AndroidManifest.xml"
+  ],
+  "supports_android": true,
+  "type": "group"
+}

@@ -1,0 +1,247 @@
+rule clang_x64_cxx_module
+  command =  ../../third_party/llvm-build/Release+Asserts/bin/clang++ -MMD -MF ${out}.d ${defines} ${include_dirs} ${cflags} ${cflags_cc} ${module_deps_no_self} -fmodule-name=${label_name} -c -x c++ -Xclang -emit-module ${in} -o ${out}
+  description = CXX_MODULE ${out}
+  depfile = ${out}.d
+  deps = gcc
+rule clang_x64_link
+  command = "python3" "../../build/toolchain/gcc_link_wrapper.py" --output="${output_dir}/${target_output_name}${output_extension}" -- ../../third_party/llvm-build/Release+Asserts/bin/clang++ ${ldflags} -o "${output_dir}/${target_output_name}${output_extension}" -Wl,--start-group @"${output_dir}/${target_output_name}${output_extension}.rsp" -Wl,--end-group  ${solibs} ${libs} -Wl,--start-group ${rlibs} -Wl,--end-group 
+  description = LINK ${output_dir}/${target_output_name}${output_extension}
+  rspfile = ${output_dir}/${target_output_name}${output_extension}.rsp
+  rspfile_content = ${in}
+  pool = build_toolchain_link_pool
+rule clang_x64_cxx
+  command =  ../../third_party/llvm-build/Release+Asserts/bin/clang++ -MMD -MF ${out}.d ${defines} ${include_dirs} ${cflags} ${cflags_cc} ${module_deps_no_self} -c ${in} -o ${out}
+  description = CXX ${out}
+  depfile = ${out}.d
+  deps = gcc
+rule clang_x64_solink
+  command = "python3" "../../build/toolchain/gcc_solink_wrapper.py" --readelf="../../third_party/llvm-build/Release+Asserts/bin/llvm-readelf" --nm="../../third_party/llvm-build/Release+Asserts/bin/llvm-nm"  --sofile="${output_dir}/${target_output_name}${output_extension}" --tocfile="${output_dir}/${target_output_name}${output_extension}.TOC" --output="${output_dir}/${target_output_name}${output_extension}" -- ../../third_party/llvm-build/Release+Asserts/bin/clang++ -shared -Wl,-soname="${target_output_name}${output_extension}" ${ldflags} -o "${output_dir}/${target_output_name}${output_extension}" @"${output_dir}/${target_output_name}${output_extension}.rsp" ${rlibs} 
+  description = SOLINK ${output_dir}/${target_output_name}${output_extension}
+  rspfile = ${output_dir}/${target_output_name}${output_extension}.rsp
+  rspfile_content = -Wl,--whole-archive ${in} ${solibs} -Wl,--no-whole-archive ${libs}
+  pool = build_toolchain_link_pool
+  restat = 1
+rule clang_x64_stamp
+  command = touch ${out}
+  description = STAMP ${out}
+rule clang_x64_solink_module
+  command = ../../third_party/llvm-build/Release+Asserts/bin/clang++ -shared ${ldflags} -o "${output_dir}/${target_output_name}${output_extension}" -Wl,-soname="${target_output_name}${output_extension}" @"${output_dir}/${target_output_name}${output_extension}.rsp"
+  description = SOLINK_MODULE ${output_dir}/${target_output_name}${output_extension}
+  rspfile = ${output_dir}/${target_output_name}${output_extension}.rsp
+  rspfile_content = -Wl,--whole-archive ${in} ${solibs} -Wl,--no-whole-archive ${libs} ${rlibs}
+  pool = build_toolchain_link_pool
+rule clang_x64_alink
+  command = rm -f ${out} && "../../third_party/llvm-build/Release+Asserts/bin/llvm-ar" ${arflags} -r -c -D ${out} @"${out}.rsp"
+  description = AR ${out}
+  rspfile = ${out}.rsp
+  rspfile_content = ${in}
+rule clang_x64_cc
+  command =  ../../third_party/llvm-build/Release+Asserts/bin/clang -MMD -MF ${out}.d ${defines} ${include_dirs} ${cflags} ${cflags_c} -c ${in} -o ${out}
+  description = CC ${out}
+  depfile = ${out}.d
+  deps = gcc
+rule clang_x64_asm
+  command = ../../third_party/llvm-build/Release+Asserts/bin/clang -MMD -MF ${out}.d ${defines} ${include_dirs} ${asmflags} -c ${in} -o ${out}
+  description = ASM ${out}
+  depfile = ${out}.d
+  deps = gcc
+rule clang_x64_copy
+  command = ln -f ${in} ${out} 2>/dev/null || (rm -rf ${out} && cp -af ${in} ${out})
+  description = COPY ${in} ${out}
+
+subninja clang_x64/obj/build/buildflag_header_h.ninja
+rule __build_chromeos_buildflags___build_toolchain_linux_clang_x64__rule
+  rspfile = __build_chromeos_buildflags___build_toolchain_linux_clang_x64__rule.rsp
+  rspfile_content = --flags IS_CHROMEOS_DEVICE=false IS_CHROMEOS_ASH=false IS_CHROMEOS_WITH_HW_DETAILS=false IS_REVEN=false
+  command = python3 ../../build/write_buildflag_header.py --output build/chromeos_buildflags.h --rulename //build$:chromeos_buildflags --gen-dir clang_x64/gen --definitions ${rspfile}
+  description = ACTION //build:chromeos_buildflags(//build/toolchain/linux:clang_x64)
+  restat = 1
+  pool = build_toolchain_action_pool
+
+build clang_x64/gen/build/chromeos_buildflags.h: __build_chromeos_buildflags___build_toolchain_linux_clang_x64__rule | ../../build/write_buildflag_header.py
+
+build clang_x64/phony/build/chromeos_buildflags: phony clang_x64/gen/build/chromeos_buildflags.h
+build clang_x64/phony/build/config/common_deps: phony clang_x64/obj/buildtools/third_party/libc++/libc++.a
+build clang_x64/phony/build/config/executable_deps: phony clang_x64/phony/build/config/common_deps
+subninja clang_x64/obj/buildtools/third_party/libc++/libc++.ninja
+subninja clang_x64/obj/buildtools/third_party/libc++abi/libc++abi.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl.ninja
+build clang_x64/phony/third_party/abseil-cpp/absl_component_deps: phony clang_x64/phony/third_party/abseil-cpp/absl/base/base clang_x64/phony/third_party/abseil-cpp/absl/base/log_severity clang_x64/phony/third_party/abseil-cpp/absl/container/btree clang_x64/phony/third_party/abseil-cpp/absl/container/fixed_array clang_x64/phony/third_party/abseil-cpp/absl/container/flat_hash_map clang_x64/phony/third_party/abseil-cpp/absl/container/flat_hash_set clang_x64/phony/third_party/abseil-cpp/absl/container/inlined_vector clang_x64/phony/third_party/abseil-cpp/absl/container/node_hash_map clang_x64/phony/third_party/abseil-cpp/absl/container/node_hash_set clang_x64/phony/third_party/abseil-cpp/absl/debugging/failure_signal_handler clang_x64/phony/third_party/abseil-cpp/absl/debugging/stacktrace clang_x64/phony/third_party/abseil-cpp/absl/debugging/symbolize clang_x64/phony/third_party/abseil-cpp/absl/hash/hash clang_x64/phony/third_party/abseil-cpp/absl/log/absl_check clang_x64/phony/third_party/abseil-cpp/absl/log/absl_log clang_x64/phony/third_party/abseil-cpp/absl/log/absl_vlog_is_on clang_x64/phony/third_party/abseil-cpp/absl/log/die_if_null clang_x64/phony/third_party/abseil-cpp/absl/log/globals clang_x64/phony/third_party/abseil-cpp/absl/log/initialize clang_x64/phony/third_party/abseil-cpp/absl/log/log_entry clang_x64/phony/third_party/abseil-cpp/absl/log/log_sink clang_x64/phony/third_party/abseil-cpp/absl/log/log_sink_registry clang_x64/phony/third_party/abseil-cpp/absl/numeric/bits clang_x64/phony/third_party/abseil-cpp/absl/numeric/int128 clang_x64/phony/third_party/abseil-cpp/absl/random/random clang_x64/phony/third_party/abseil-cpp/absl/random/bit_gen_ref clang_x64/phony/third_party/abseil-cpp/absl/random/distributions clang_x64/phony/third_party/abseil-cpp/absl/status/status clang_x64/phony/third_party/abseil-cpp/absl/status/statusor clang_x64/phony/third_party/abseil-cpp/absl/strings/strings clang_x64/phony/third_party/abseil-cpp/absl/strings/charset clang_x64/phony/third_party/abseil-cpp/absl/strings/cord clang_x64/phony/third_party/abseil-cpp/absl/strings/str_format clang_x64/phony/third_party/abseil-cpp/absl/strings/string_view clang_x64/phony/third_party/abseil-cpp/absl/synchronization/synchronization clang_x64/phony/third_party/abseil-cpp/absl/time/time clang_x64/phony/third_party/abseil-cpp/absl/types/span clang_x64/phony/third_party/abseil-cpp/absl/base/raw_logging_internal clang_x64/phony/third_party/abseil-cpp/absl/container/layout
+subninja clang_x64/obj/third_party/abseil-cpp/absl/algorithm/algorithm.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/algorithm/container.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/atomic_hook.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/base.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/base_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/config.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/core_headers.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/cycleclock_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/dynamic_annotations.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/endian.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/errno_saver.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/fast_type_id.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/iterator_traits_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/log_severity.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/malloc_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/no_destructor.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/nullability.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/prefetch.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/raw_logging_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/spinlock_wait.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/strerror.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/throw_delegate.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/base/tracing_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/cleanup/cleanup.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/cleanup/cleanup_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/btree.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/common.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/common_policy_traits.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/compressed_tuple.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/container_memory.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/fixed_array.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/flat_hash_map.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/flat_hash_set.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/hash_container_defaults.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/hash_function_defaults.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/hash_policy_traits.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/hashtable_control_bytes.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/hashtable_debug_hooks.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/hashtablez_sampler.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/inlined_vector.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/inlined_vector_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/layout.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/node_hash_map.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/node_hash_set.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/node_slot_policy.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/raw_hash_map.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/raw_hash_set.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/container/raw_hash_set_resize_impl.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/crc/cpu_detect.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/crc/crc32c.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/crc/crc_cord_state.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/crc/crc_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/crc/non_temporal_arm_intrinsics.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/crc/non_temporal_memcpy.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/bounded_utf8_length_sequence.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/debugging_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/decode_rust_punycode.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/demangle_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/demangle_rust.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/examine_stack.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/failure_signal_handler.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/leak_check.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/stacktrace.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/symbolize.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/debugging/utf8_for_code_point.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/functional/any_invocable.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/functional/bind_front.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/functional/function_ref.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/functional/overload.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/hash/city.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/hash/hash.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/hash/weakly_mixed_integer.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/absl_check.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/absl_log.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/absl_vlog_is_on.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/die_if_null.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/globals.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/initialize.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/log.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/log_entry.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/log_sink.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/log_sink_registry.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/vlog_is_on.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/append_truncated.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/check_impl.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/check_op.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/conditions.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/config.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/fnmatch.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/format.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/globals.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/log_impl.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/log_message.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/log_sink_set.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/nullguard.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/nullstream.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/proto.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/strip.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/structured_proto.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/vlog_config.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/log/internal/voidify.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/memory/memory.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/meta/type_traits.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/numeric/bits.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/numeric/int128.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/numeric/representation.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/profiling/exponential_biased.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/profiling/sample_recorder.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/bit_gen_ref.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/distributions.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/random.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/seed_gen_exception.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/seed_sequences.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/distribution_caller.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/entropy_pool.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/fast_uniform_bits.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/fastmath.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/generate_real.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/iostream_state_saver.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/nonsecure_base.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/pcg_engine.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/platform.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/randen.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/randen_engine.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/randen_hwaes.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/randen_hwaes_impl.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/randen_slow.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/salted_seed_seq.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/seed_material.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/traits.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/uniform_helper.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/random/internal/wide_multiply.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/status/status.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/status/statusor.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/charset.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/cord.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/cord_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/cordz_functions.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/cordz_handle.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/cordz_info.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/cordz_statistics.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/cordz_update_scope.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/cordz_update_tracker.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/has_ostream_operator.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/str_format.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/str_format_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/string_view.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/strings/strings.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/synchronization/graphcycles_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/synchronization/kernel_timeout_internal.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/synchronization/synchronization.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/time/time.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/time/internal/cctz/civil_time.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/time/internal/cctz/time_zone.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/types/compare.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/types/optional.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/types/span.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/types/variant.ninja
+subninja clang_x64/obj/third_party/abseil-cpp/absl/utility/utility.ninja
+subninja clang_x64/obj/third_party/ijar/ijar.ninja
+subninja clang_x64/obj/third_party/protobuf/protobuf_full.ninja
+subninja clang_x64/obj/third_party/protobuf/protobuf_lite.ninja
+subninja clang_x64/obj/third_party/protobuf/protoc.ninja
+subninja clang_x64/obj/third_party/protobuf/protoc_cpp.ninja
+subninja clang_x64/obj/third_party/protobuf/protoc_java.ninja
+subninja clang_x64/obj/third_party/protobuf/protoc_java_all_headers.ninja
+subninja clang_x64/obj/third_party/protobuf/protoc_java_full.ninja
+subninja clang_x64/obj/third_party/protobuf/protoc_java_lite.ninja
+subninja clang_x64/obj/third_party/protobuf/protoc_lib.ninja
+subninja clang_x64/obj/third_party/protobuf/protoc_python.ninja
+subninja clang_x64/obj/third_party/protobuf/utf8_range.ninja
+subninja clang_x64/obj/third_party/zlib/zlib.ninja
+subninja clang_x64/obj/third_party/zlib/zlib_adler32_simd.ninja
+subninja clang_x64/obj/third_party/zlib/zlib_common_headers.ninja
+subninja clang_x64/obj/third_party/zlib/zlib_crc32_simd.ninja
+subninja clang_x64/obj/third_party/zlib/zlib_data_chunk_simd.ninja
+subninja clang_x64/obj/third_party/zlib/zlib_slide_hash_simd.ninja

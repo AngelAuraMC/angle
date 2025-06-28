@@ -1,0 +1,24 @@
+{
+  "bundled_srcjars": [
+
+  ],
+  "bypass_platform_checks": false,
+  "chromium_code": true,
+  "deps_configs": [
+    "gen/build/android/build_java.build_config.json",
+    "gen/build/android/build_java.build_config.json",
+    "gen/build/android/gtest_apk/native_test_instrumentation_test_runner_java.build_config.json",
+    "gen/third_party/android_sdk/android_sdk_java.build_config.json"
+  ],
+  "dex_path": "obj/src/tests/native_test_java.dex.jar",
+  "gn_target": "//src/tests:native_test_java",
+  "interface_jar_path": "obj/src/tests/native_test_java.turbine.jar",
+  "is_prebuilt": false,
+  "processed_jar_path": "obj/src/tests/native_test_java.javac.jar",
+  "requires_android": true,
+  "requires_robolectric": false,
+  "supports_android": true,
+  "target_sources_file": "gen/src/tests/native_test_java.sources",
+  "type": "java_library",
+  "unprocessed_jar_path": "obj/src/tests/native_test_java.javac.jar"
+}

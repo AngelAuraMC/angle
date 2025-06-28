@@ -1,0 +1,23 @@
+{
+  "bundled_srcjars": [
+
+  ],
+  "bypass_platform_checks": false,
+  "chromium_code": true,
+  "deps_configs": [
+    "gen/build/android/build_java.build_config.json"
+  ],
+  "gn_target": "//build/android/stacktrace:java_deobfuscate_java",
+  "input_jars_paths": [
+    "../../third_party/r8/cipd/lib/r8.jar"
+  ],
+  "interface_jar_path": "obj/build/android/stacktrace/java_deobfuscate_java.turbine.jar",
+  "is_prebuilt": false,
+  "processed_jar_path": "obj/build/android/stacktrace/java_deobfuscate_java.javac.jar",
+  "requires_android": false,
+  "requires_robolectric": false,
+  "supports_android": false,
+  "target_sources_file": "gen/build/android/stacktrace/java_deobfuscate_java.sources",
+  "type": "java_library",
+  "unprocessed_jar_path": "obj/build/android/stacktrace/java_deobfuscate_java.javac.jar"
+}

@@ -1,0 +1,8 @@
+libangle_util.so
+libGLESv2_angle.so
+libEGL_angle.so
+libGLESv1_CM_angle.so
+libGLESv2_vulkan_secondaries_angle.so
+libEGL_vulkan_secondaries_angle.so
+libangle_deqp_libgles31_rotate180.so
+libangle_deqp_gles31_rotate180_tests__library.so

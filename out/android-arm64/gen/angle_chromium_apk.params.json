@@ -1,0 +1,38 @@
+{
+  "android_manifest": "gen/angle_chromium_apk/android/AndroidManifest.xml",
+  "apk_path": "apks/AngleLibraries.apk",
+  "bundled_srcjars": [
+    "gen/angle_chromium_apk__compile_resources.srcjar",
+    "gen/angle_chromium_apk__native_libraries.srcjar",
+    "gen/angle_chromium_apk__build_config_srcjar.srcjar"
+  ],
+  "bypass_platform_checks": false,
+  "chromium_code": true,
+  "deps_configs": [
+    "gen/build/android/build_java.build_config.json",
+    "gen/org.chromium.angle_assets.build_config.json",
+    "gen/third_party/android_sdk/android_sdk_java.build_config.json"
+  ],
+  "dex_path": "obj/angle_chromium_apk.dex.jar",
+  "final_dex_path": "obj/angle_chromium_apk/angle_chromium_apk.mergeddex.jar",
+  "gn_target": "//:angle_chromium_apk__java",
+  "interface_jar_path": "obj/angle_chromium_apk.turbine.jar",
+  "is_prebuilt": false,
+  "loadable_modules": [
+    "lib.compressed/libEGL_angle.so",
+    "lib.compressed/libGLESv1_CM_angle.so",
+    "lib.compressed/libGLESv2_angle.so",
+    "lib.compressed/libfeature_support_angle.so"
+  ],
+  "merged_android_manifest": "gen/angle_chromium_apk/AndroidManifest.merged.xml",
+  "processed_jar_path": "obj/angle_chromium_apk.javac.jar",
+  "proguard_enabled": false,
+  "requires_android": true,
+  "requires_robolectric": false,
+  "rtxt_path": "gen/angle_chromium_apk__compile_resources_R.txt",
+  "supports_android": true,
+  "type": "android_apk",
+  "unprocessed_jar_path": "obj/angle_chromium_apk.javac.jar",
+  "version_code": "25679",
+  "version_name": "ANGLE Developer Build"
+}

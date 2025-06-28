@@ -1,0 +1,34 @@
+defines = -DUSE_UDEV -DUSE_AURA=1 -DUSE_OZONE=1 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D_FORTIFY_SOURCE=2 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_GNU_SOURCE -DCR_CLANG_REVISION=\"llvmorg-21-init-16348-gbd809ffb-1\" -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE -D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS -D_LIBCXXABI_DISABLE_VISIBILITY_ANNOTATIONS -D_LIBCPP_INSTRUMENTED_WITH_ASAN=0 -DCR_LIBCXX_REVISION=b5d83e70a1537fbce965e6319877c76794daaa80 -DCR_SYSROOT_KEY=20250129T203412Z-1 -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0
+include_dirs = -I../.. -Iclang_x64/gen -I../../buildtools/third_party/libc++ -I../../third_party/zlib
+cflags = -Wall -Wextra -Wimplicit-fallthrough -Wextra-semi -Wunreachable-code-aggressive -Wthread-safety -Wgnu -Wno-gnu-anonymous-struct -Wno-gnu-conditional-omitted-operand -Wno-gnu-include-next -Wno-gnu-label-as-value -Wno-gnu-redeclared-enum -Wno-gnu-statement-expression -Wno-gnu-zero-variadic-macro-arguments -Wno-zero-length-array -Wno-missing-field-initializers -Wno-unused-parameter -Wno-psabi -Wloop-analysis -Wno-unneeded-internal-declaration -Wno-cast-function-type -Wno-thread-safety-reference-return -Wno-nontrivial-memcall -Wno-character-conversion -Wshadow -Werror -fno-delete-null-pointer-checks -fno-strict-overflow -fno-ident -fno-strict-aliasing -fstack-protector -funwind-tables -fPIC -pthread -fcolor-diagnostics -fmerge-all-constants -fno-sized-deallocation -fcrash-diagnostics-dir=../../tools/clang/crashreports -mllvm -instcombine-lower-dbg-declare=0 -mllvm -split-threshold-for-reg-with-hint=0 -ffp-contract=off -Wa,--crel,--allow-experimental-crel -fcomplete-member-pointers --target=x86_64-unknown-linux-gnu -msse3 -Wno-builtin-macro-redefined -D__DATE__= -D__TIME__= -D__TIMESTAMP__= -ffile-compilation-dir=. -no-canonical-prefixes -ftrivial-auto-var-init=pattern -O2 -fdata-sections -ffunction-sections -fno-unique-section-names -fno-math-errno -fno-omit-frame-pointer -g0 -fvisibility=hidden -Wheader-hygiene -Wstring-conversion -Wtautological-overlap-compare -Wno-shadow -Wno-unused-but-set-variable
+cflags_cc = -Wno-invalid-offsetof -Wenum-compare-conditional -Wno-nullability-completeness -std=c++20 -Wno-trigraphs -gsimple-template-names -fno-exceptions -fno-rtti -nostdinc++ -isystem../../third_party/libc++/src/include -isystem../../third_party/libc++abi/src/include --sysroot=../../build/linux/debian_bullseye_amd64-sysroot -fvisibility-inlines-hidden
+label_name = ijar
+target_out_dir = clang_x64/obj/third_party/ijar
+target_output_name = ijar
+
+build clang_x64/obj/third_party/ijar/ijar/classfile.o: clang_x64_cxx ../../third_party/ijar/classfile.cc
+  source_file_part = classfile.cc
+  source_name_part = classfile
+build clang_x64/obj/third_party/ijar/ijar/ijar.o: clang_x64_cxx ../../third_party/ijar/ijar.cc
+  source_file_part = ijar.cc
+  source_name_part = ijar
+build clang_x64/obj/third_party/ijar/ijar/mapped_file_unix.o: clang_x64_cxx ../../third_party/ijar/mapped_file_unix.cc
+  source_file_part = mapped_file_unix.cc
+  source_name_part = mapped_file_unix
+build clang_x64/obj/third_party/ijar/ijar/platform_utils.o: clang_x64_cxx ../../third_party/ijar/platform_utils.cc
+  source_file_part = platform_utils.cc
+  source_name_part = platform_utils
+build clang_x64/obj/third_party/ijar/ijar/zip.o: clang_x64_cxx ../../third_party/ijar/zip.cc
+  source_file_part = zip.cc
+  source_name_part = zip
+build clang_x64/obj/third_party/ijar/ijar/zlib_client.o: clang_x64_cxx ../../third_party/ijar/zlib_client.cc
+  source_file_part = zlib_client.cc
+  source_name_part = zlib_client
+
+build clang_x64/ijar: clang_x64_link clang_x64/obj/third_party/ijar/ijar/classfile.o clang_x64/obj/third_party/ijar/ijar/ijar.o clang_x64/obj/third_party/ijar/ijar/mapped_file_unix.o clang_x64/obj/third_party/ijar/ijar/platform_utils.o clang_x64/obj/third_party/ijar/ijar/zip.o clang_x64/obj/third_party/ijar/ijar/zlib_client.o clang_x64/obj/third_party/zlib/zlib_adler32_simd/adler32_simd.o clang_x64/obj/third_party/zlib/zlib_data_chunk_simd/inffast_chunk.o clang_x64/obj/third_party/zlib/zlib_data_chunk_simd/inflate.o clang_x64/obj/third_party/zlib/zlib_crc32_simd/crc32_simd.o clang_x64/obj/third_party/zlib/zlib_crc32_simd/crc_folding.o clang_x64/obj/third_party/zlib/libchrome_zlib.a clang_x64/obj/buildtools/third_party/libc++/libc++.a clang_x64/obj/buildtools/third_party/libc++abi/libc++abi.a | ../../third_party/llvm-build/Release+Asserts/lib/clang/21/lib/x86_64-unknown-linux-gnu/libclang_rt.builtins.a || clang_x64/phony/build/config/executable_deps clang_x64/phony/third_party/zlib/zlib_adler32_simd clang_x64/phony/third_party/zlib/zlib_data_chunk_simd clang_x64/phony/third_party/zlib/zlib_crc32_simd
+  ldflags = -Werror -fuse-ld=lld -Wl,--fatal-warnings -Wl,--build-id=fast -fPIC -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,--icf=all -Wl,--color-diagnostics -Wl,--undefined-version -Wl,--no-call-graph-profile-sort --target=x86_64-unknown-linux-gnu -no-canonical-prefixes -Wl,--gc-sections -Wl,-z,defs -Wl,--as-needed -nostdlib++ --sysroot=../../build/linux/debian_bullseye_amd64-sysroot -rdynamic -pie -Wl,--disable-new-dtags
+  libs = ../../third_party/llvm-build/Release+Asserts/lib/clang/21/lib/x86_64-unknown-linux-gnu/libclang_rt.builtins.a -ldl -lpthread -lrt
+  frameworks =
+  swiftmodules =
+  output_extension =
+  output_dir = clang_x64

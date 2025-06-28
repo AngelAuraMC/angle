@@ -1,0 +1,18 @@
+{
+  "bundled_srcjars": [
+
+  ],
+  "bypass_platform_checks": false,
+  "chromium_code": false,
+  "deps_configs": [
+
+  ],
+  "gn_target": "//third_party/android_sdk:public_framework_system_java",
+  "interface_jar_path": "obj/third_party/android_sdk/public_framework_system_java.ijar.jar",
+  "is_prebuilt": true,
+  "requires_android": false,
+  "requires_robolectric": false,
+  "supports_android": true,
+  "type": "system_java_library",
+  "unprocessed_jar_path": "../../third_party/android_system_sdk/cipd/android_system.jar"
+}
