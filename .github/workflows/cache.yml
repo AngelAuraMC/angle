@@ -5,12 +5,10 @@ on:
 
 jobs:
   build:
-# This requires about 25GB to properly download. Please make sure the runner can provide that.
     runs-on: [ubuntu-24.04, ubuntu-22.04]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-# This bit always takes forever to finish cloning so lets just cache it
       - name: Cache third_party/llvm
         uses: actions/cache@v4
         with:
