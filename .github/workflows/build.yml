@@ -27,7 +27,7 @@ jobs:
             runs-on: ubuntu-24.04
           - os: ios
             arch: arm64
-            runs-on: macos-latest
+            runs-on: macos-15
     runs-on: ${{ matrix.runs-on }}
     steps:
       - name: Checkout
