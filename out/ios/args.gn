@@ -6,4 +6,4 @@ is_debug = false
 target_cpu = "arm64"
 target_environment = "device"
 target_os = "ios"
-
+angle_build_tests=false

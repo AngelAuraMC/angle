@@ -5,3 +5,4 @@ target_cpu = "x64"
 angle_enable_vulkan = true
 is_component_build = false
 is_debug = false
+angle_build_tests=false
