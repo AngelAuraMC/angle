@@ -6,7 +6,7 @@ on:
 jobs:
   build:
 # This requires about 25GB to properly download. Please make sure the runner can provide that.
-    runs-on: self-hosted
+    runs-on: [ubuntu-24.04, ubuntu-22.04]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
