@@ -66,4 +66,4 @@ jobs:
             },
           ]
           target_os = ["ios", "android"]'
-          gclient sync -Rf
+          gclient sync -Rf --no-history --with_branch_heads

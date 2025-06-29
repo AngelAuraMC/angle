@@ -84,7 +84,7 @@ jobs:
             },
           ]
           target_os = ["${{ matrix.os }}"]'
-          gclient sync -Rf
+          gclient sync -Rf --no-history --with_branch_heads
       - name: Build ANGLE
         run: |
           gn gen out/${{ matrix.os }}-${{ matrix.arch }}
