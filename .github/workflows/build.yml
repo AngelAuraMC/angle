@@ -11,20 +11,25 @@ on:
 jobs:
   build:
 # This requires about 25GB to properly build. Please make sure the runner can provide that.
-    runs-on: self-hosted
     strategy:
       matrix:
         include:
           - os: android
             arch: arm64
+            runs-on: ubuntu-24.04
           - os: android
             arch: arm
+            runs-on: ubuntu-24.04
           - os: android
             arch: x86
+            runs-on: ubuntu-24.04
           - os: android
             arch: x64
+            runs-on: ubuntu-24.04
           - os: ios
             arch: arm64
+            runs-on: macos-latest
+    runs-on: ${{ matrix.runs-on }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
