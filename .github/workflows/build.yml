@@ -9,7 +9,48 @@ on:
   workflow_dispatch:
 
 jobs:
+  update-build-environment-cache:
+    permissions:
+      actions: write
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Restore environment from cache
+        id: cached-environment-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: ./
+          key: ios_and_android-build-environment
+      - name: Verify cached environment is valid
+        run: |
+          if [ ! -d "depot_tools" ] ; then
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          fi
+          export PATH="$PWD/depot_tools:$PATH"
+          gclient config --spec 'solutions = [
+            {
+              "name": ".",
+              "url": "https://chromium.googlesource.com/angle/angle.git",
+              "deps_file": "DEPS",
+              "managed": False,
+              "custom_vars": {},
+            },
+          ]
+          target_os = ["ios", "android"]'
+          gclient sync -Rf --no-history --with_branch_heads
+# Stupid workaround, see https://github.com/azu/github-actions-overwrite-cache-example and https://github.com/actions/cache/issues/342
+      - name: Delete Previous Cache
+        run: |
+          gh cache delete "${{ steps.cached-environment-restore.outputs.cache-primary-key }}" --repo $GITHUB_REPOSITORY
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Save environment to cache
+        uses: actions/cache/save@v4
+        with:
+          path: ./
+          key: ios_and_android-build-environment
+
   build:
+    needs: update-build-environment-cache
     strategy:
       matrix:
         include:
@@ -32,51 +73,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Cache third_party/llvm
-        uses: actions/cache@v4
+      - name: Restore environment from cache
+        id: cached-environment-restore
+        uses: actions/cache/restore@v4
         with:
-          path: third_party/llvm
-          key: third_party-llvm
-      - name: Cache third_party/VK-GL-CTS
-        uses: actions/cache@v4
-        with:
-          path: third_party/VK-GL-CTS
-          key: third_party-VK-GL-CTS
-      - name: Cache third_party/SwiftShader
-        uses: actions/cache@v4
-        with:
-          path: third_party/SwiftShader
-          key: third_party-SwiftShader
-      - name: Cache third_party/dawn
-        uses: actions/cache@v4
-        with:
-          path: third_party/dawn
-          key: third_party-dawn
-      - name: Cache depot_tools
-        uses: actions/cache@v4
-        with:
-          path: depot_tools
-          key: depot-tools
-# This should only be rarely ran so its here so the cache priority still is somewhat biggest to smallest
-      - name: Install depot_tools
+          path: ./
+          key: ios_and_android-build-environment
+      - name: Fetch, verify, and setup build environment
         run: |
-          if [ ! -d "depot_tools" ] ; then
-          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          fi
+          export PATH="$PWD/depot_tools:$PATH"
           echo "$PWD/depot_tools" >> $GITHUB_PATH
-      - name: Cache tools
-        uses: actions/cache@v4
-        with:
-          path: tools
-          key: tools
-      - name: Cache build
-        uses: actions/cache@v4
-        with:
-          path: build
-          key: build
-
-      - name: Fetch ANGLE and dependencies
-        run: |
           gclient config --spec 'solutions = [
             {
               "name": ".",
