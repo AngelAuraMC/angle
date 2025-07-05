@@ -98,8 +98,15 @@ jobs:
         run: |
           gn gen out/${{ matrix.os }}-${{ matrix.arch }}
           autoninja -C out/${{ matrix.os }}-${{ matrix.arch }}
-      - name: Upload build
+      - name: Upload builds
         uses: actions/upload-artifact@v4
         with:
           name: ANGLE-${{ matrix.os }}-${{ matrix.arch }}
           path: out/${{ matrix.os }}-${{ matrix.arch }}
+      - name: Upload shared library
+        uses: actions/upload-artifact@v4
+        with:
+          name: ANGLE-${{ matrix.os }}-${{ matrix.arch }}.so
+          path: |
+            out/${{ matrix.os }}-${{ matrix.arch }}/lib*.so
+            !out/${{ matrix.os }}-${{ matrix.arch }}/*.so.TOC
